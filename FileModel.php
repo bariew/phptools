@@ -48,9 +48,8 @@ class FileModel
         foreach ($options as $attribute => $value) {
             $this->$attribute = $value;
         }
-
         $this->data = $this->readData();
-        $this->writePath = $this->writePath ? : $this->readPath;
+        $this->writePath = $this->writePath ? $this->writePath : $this->readPath;
     }
 
     /**
@@ -63,7 +62,7 @@ class FileModel
             case self::TYPE_JSON :
                 $data = json_decode(file_get_contents($this->readPath), true);
                 break;
-            default : $data = include $this->readPath;
+            default : $data = require $this->readPath;
         }
         return $data;
     }
@@ -168,7 +167,8 @@ class FileModel
                 break;
             default :  $content = '<?php return '. var_export($this->data, true) . ';';
         }
-
+        apc_clear_cache();
+        opcache_reset();
         return file_put_contents($this->writePath, $content);
     }
 } 
