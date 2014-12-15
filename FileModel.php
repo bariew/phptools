@@ -167,8 +167,12 @@ class FileModel
                 break;
             default :  $content = '<?php return '. var_export($this->data, true) . ';';
         }
-        apc_clear_cache();
-        opcache_reset();
+        if (function_exists('apc_clear_cache')) {
+            apc_clear_cache();
+        }
+        if (function_exists('opcache_reset')) {
+            opcache_reset();
+        }
         return file_put_contents($this->writePath, $content);
     }
 } 
