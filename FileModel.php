@@ -148,9 +148,6 @@ class FileModel
      */
     public function put($data)
     {
-        if ($errorKeys = array_diff_key($data, $this->data)) {
-            throw new \Exception("Wrong config keys: " . implode(', ', $errorKeys));
-        }
         $this->data = array_merge($this->data, $data);
         return $this->save();
     }
